@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { Box, Button, Divider, Flexbox, FlexCell, Input, Padding, Text } from '@/ui';
+import { useContext } from 'react';
+import FormContext from '@/contexts/form';
+import { useRouter } from 'next/router';
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sectionData: any;
+  title: string;
+  totalSections: number;
 }
 
 const handleSubmitForm = () => {
   console.log('Submit!');
 };
 
-export function FormBuilder({ sectionData }: Props): JSX.Element {
+export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.Element {
+  const [formData, addFormData] = useContext(FormContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log('FORMDATA', formData, totalSections);
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       fullName: '',
@@ -19,13 +31,16 @@ export function FormBuilder({ sectionData }: Props): JSX.Element {
       phoneNumber: '',
     },
     onSubmit: (values) => {
-      console.log('hellooo', values);
+      addFormData(values);
     },
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
       Sections: {sectionData.id}
+      Total: {totalSections}
+      title: {title}
+      CONTEXT: {formData.info}
       <Box width={640} border={1} borderRadius={10}>
         <Padding size={24}>
           <Text size="large">{sectionData.label}</Text>
@@ -74,9 +89,17 @@ export function FormBuilder({ sectionData }: Props): JSX.Element {
           <Divider />
           <Flexbox alignItems="center" justifyContent="flex-end" padding={24}>
             <FlexCell>
-              <Button size="primary" type="submit">
-                Submit
-              </Button>
+              {sectionData.currentSection === totalSections && (
+                <Button size="primary" type="submit">
+                  Submit
+                </Button>
+              )}
+
+              {sectionData.currentSection < totalSections && (
+                <Button size="primary" type="submit">
+                  Next
+                </Button>
+              )}
             </FlexCell>
           </Flexbox>
         </Padding>

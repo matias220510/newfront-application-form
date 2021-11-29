@@ -18,7 +18,7 @@ const Wrapper = styled.section`
   justify-content: center;
 `;
 
-export default function Form({ sectionData }): JSX.Element {
+export default function Form({ sectionData, title, totalSections }): JSX.Element {
   useEffect(() => {
     console.log('Hello!');
   }, []);
@@ -26,7 +26,7 @@ export default function Form({ sectionData }): JSX.Element {
   return (
     <FlowWrapper>
       <FlowBody>
-        <FormBuilder sectionData={sectionData} />
+        <FormBuilder sectionData={sectionData} title={title} totalSections={totalSections} />
       </FlowBody>
     </FlowWrapper>
   );
@@ -45,10 +45,8 @@ export async function getStaticPaths() {
 
 // This also gets called at build time
 export async function getStaticProps({ params }) {
-  console.log('PARAM:', params);
   const { sections, title, totalSections } = formData;
   const sectionList = sections.filter((p) => p.id.toString() === params.id);
-  console.log(sectionList[0]);
   return {
     props: {
       sectionData: sectionList[0],
