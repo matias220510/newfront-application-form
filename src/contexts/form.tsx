@@ -4,15 +4,9 @@ import { createContext, useState } from 'react';
 const FormContext = createContext({});
 
 export const FormProvider = ({ children }) => {
-  const [formData, setFormData] = useState({ info: 'this is info' });
-  const addFormData = (values) => {
-    return setFormData((data) => {
-      return {
-        ...data,
-        ...values,
-      };
-    });
-  };
+  const [formData, setFormData] = useState({});
+
+  const addFormData = (values) => setFormData({ ...formData, ...values });
 
   return <FormContext.Provider value={[formData, addFormData]}>{children}</FormContext.Provider>;
 };

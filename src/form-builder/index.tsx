@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
+import Link from 'next/link';
 import { useFormik } from 'formik';
-import { Box, Button, Divider, Flexbox, FlexCell, Input, Padding, Text } from '@/ui';
+import { Box, Button, Divider, Flexbox, FlexCell, Padding, Text } from '@/ui';
 import { useContext } from 'react';
 import FormContext from '@/contexts/form';
-import { useRouter } from 'next/router';
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,7 +18,6 @@ const handleSubmitForm = () => {
 
 export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.Element {
   const [formData, addFormData] = useContext(FormContext);
-  const router = useRouter();
 
   useEffect(() => {
     console.log('FORMDATA', formData, totalSections);
@@ -30,17 +29,24 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
       role: '',
       phoneNumber: '',
     },
+    validate: (values) => {
+      const errors = {};
+      sectionData.questions.forEach((question) => {
+        if (question.isRequired && !values[question.apiName]) {
+          errors[question.apiName] = 'Required field';
+        }
+      });
+
+      return errors;
+    },
     onSubmit: (values) => {
       addFormData(values);
+      console.log('FORM VALUES:', values);
     },
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      Sections: {sectionData.id}
-      Total: {totalSections}
-      title: {title}
-      CONTEXT: {formData.info}
       <Box width={640} border={1} borderRadius={10}>
         <Padding size={24}>
           <Text size="large">{sectionData.label}</Text>
@@ -58,13 +64,16 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
                       width="542px"
                       placeholder={question.placeholder}
                       type="text"
-                      onChange={formik.handleChange}
                       value={formik.values[question.id]}
                       key={question.id}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
+                    {formik.errors[question.apiName] && <div className="error">{formik.errors[question.apiName]}</div>}
                   </Padding>
                 );
               case 'phoneNumber':
+              case 'number':
                 return (
                   <Padding size={0} top={20} left={0}>
                     <Text size="large">{question.label}</Text>
@@ -74,9 +83,10 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
                       width="542px"
                       placeholder={question.placeholder}
                       type="number"
-                      onChange={formik.handleChange}
-                      value={formik.values[question.id]}
                       key={question.id}
+                      value={formik.values[question.id]}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
                   </Padding>
                 );
@@ -96,11 +106,17 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
               )}
 
               {sectionData.currentSection < totalSections && (
-                <Button size="primary" type="submit">
-                  Next
-                </Button>
+                <Link href={`/form/${sectionData.currentSection + 1}`}>
+                  <a className={`${!formik.isValid ? 'disabled' : ''}`}>Next</a>
+                </Link>
               )}
             </FlexCell>
+          </Flexbox>
+        </Padding>
+        <Padding y={24}>
+          <Divider />
+          <Flexbox alignItems="center" justifyContent="center" padding={24}>
+            <FlexCell>{sectionData.currentSection === totalSections && <div>INFO:</div>}</FlexCell>
           </Flexbox>
         </Padding>
       </Box>
