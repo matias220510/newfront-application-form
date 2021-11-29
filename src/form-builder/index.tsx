@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { Box, Button, Divider, Flexbox, FlexCell, Padding, Text } from '@/ui';
@@ -18,10 +18,12 @@ const handleSubmitForm = () => {
 
 export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.Element {
   const [formData, addFormData] = useContext(FormContext);
+  const [shouldSubmitForm, setShouldSubmitForm] = useState(false);
 
   useEffect(() => {
+    setShouldSubmitForm(sectionData.currentSection === totalSections);
     console.log('FORMDATA', formData, totalSections);
-  }, []);
+  }, [sectionData.currentSection]);
 
   const formik = useFormik({
     initialValues: {
@@ -69,7 +71,9 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.errors[question.apiName] && <div className="error">{formik.errors[question.apiName]}</div>}
+                    {formik.errors[question.apiName] && formik.touched[question.apiName] && (
+                      <div className="error">{formik.errors[question.apiName]}</div>
+                    )}
                   </Padding>
                 );
               case 'phoneNumber':
@@ -88,6 +92,9 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
+                    {formik.errors[question.apiName] && formik.touched[question.apiName] && (
+                      <div className="error">{formik.errors[question.apiName]}</div>
+                    )}
                   </Padding>
                 );
               default:
@@ -99,13 +106,11 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
           <Divider />
           <Flexbox alignItems="center" justifyContent="flex-end" padding={24}>
             <FlexCell>
-              {sectionData.currentSection === totalSections && (
+              {shouldSubmitForm ? (
                 <Button size="primary" type="submit">
                   Submit
                 </Button>
-              )}
-
-              {sectionData.currentSection < totalSections && (
+              ) : (
                 <Link href={`/form/${sectionData.currentSection + 1}`}>
                   <a className={`${!formik.isValid ? 'disabled' : ''}`}>Next</a>
                 </Link>
