@@ -59,7 +59,7 @@ const formData = {
       description: '',
       questions: [
         {
-          id: 40580,
+          id: 40583,
           apiName: 'CompanyName',
           label: 'Company Name',
           ordering: '0117800000',
@@ -72,12 +72,12 @@ const formData = {
           show: true,
         },
         {
-          id: 40581,
+          id: 40584,
           apiName: 'FEIN',
           label: 'Role',
           ordering: '0117800001',
           placeholder: 'What is your Federal Employer Identification Number? (FEIN)',
-          isRequired: true,
+          isRequired: false,
           type: 'number',
           createdAt: '2019-06-12T18:48:58.011Z',
           updatedAt: '2019-06-12T18:48:58.011Z',
@@ -85,7 +85,7 @@ const formData = {
           show: true,
         },
         {
-          id: 40582,
+          id: 40585,
           apiName: 'YearsInBusiness',
           label: 'Years in business',
           ordering: '0117800003',
@@ -98,7 +98,7 @@ const formData = {
           show: true,
         },
         {
-          id: 40583,
+          id: 40586,
           apiName: 'NumberLocations',
           label: 'Numbers of locations',
           ordering: '0117800004',
@@ -111,12 +111,12 @@ const formData = {
           show: true,
         },
         {
-          id: 40584,
+          id: 40587,
           apiName: 'StateOperate',
           label: 'In which states do you operate?',
           ordering: '0117800005',
           placeholder: 'California',
-          isRequired: false,
+          isRequired: true,
           type: 'text',
           createdAt: '2019-06-12T18:48:58.011Z',
           updatedAt: '2019-06-12T18:48:58.011Z',
