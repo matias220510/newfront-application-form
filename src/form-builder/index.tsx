@@ -19,10 +19,11 @@ const handleSubmitForm = () => {
 export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.Element {
   const [formData, addFormData] = useContext(FormContext);
   const [shouldSubmitForm, setShouldSubmitForm] = useState(false);
+  const [showBackButton, setShowBackButton] = useState(false);
 
   useEffect(() => {
     setShouldSubmitForm(sectionData.currentSection === totalSections);
-    console.log('FORMDATA', formData, totalSections);
+    setShowBackButton(sectionData.currentSection <= totalSections && sectionData.currentSection > 1);
   }, [sectionData.currentSection]);
 
   const formik = useFormik({
@@ -104,7 +105,14 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
         </Padding>
         <Padding y={24}>
           <Divider />
-          <Flexbox alignItems="center" justifyContent="flex-end" padding={24}>
+          <Flexbox alignItems="center" justifyContent="space-between" padding={24}>
+            <FlexCell>
+              {showBackButton && (
+                <Link href={`/form/${sectionData.currentSection - 1}`}>
+                  <a className={`${!formik.isValid ? 'disabled' : ''}`}>Back</a>
+                </Link>
+              )}
+            </FlexCell>
             <FlexCell>
               {shouldSubmitForm ? (
                 <Button size="primary" type="submit">
