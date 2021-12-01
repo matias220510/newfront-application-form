@@ -19,10 +19,6 @@ const Wrapper = styled.section`
 `;
 
 export default function Form({ sectionData, title, totalSections }): JSX.Element {
-  useEffect(() => {
-    console.log('Hello!');
-  }, []);
-
   return (
     <FlowWrapper>
       <FlowBody>
@@ -37,8 +33,6 @@ export async function getStaticPaths() {
   const paths = formData.sections.map((section) => ({
     params: { id: section.id.toString() },
   }));
-
-  console.log('PATHS:', paths);
 
   return { paths, fallback: false };
 }

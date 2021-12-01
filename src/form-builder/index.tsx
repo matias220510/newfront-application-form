@@ -74,12 +74,12 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
       });
 
       setIsFormValid(!Object.keys(errors).length);
-
       return errors;
     },
     onSubmit: (values) => {
       addFormData(values);
-      console.log('ON SUBMIT. FORM VALUES:', values);
+      // eslint-disable-next-line no-console
+      console.log('FORM VALUES:', values);
     },
   });
 
@@ -87,17 +87,17 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
     <form onSubmit={formik.handleSubmit}>
       <Box width={640} border={1} borderRadius={10}>
         <Padding size={24}>
-          <Text specificSize={20} weight={400} color="#000000">
+          <Text specificSize={20} weight={400} color="#000000" marginBottom={8}>
             {sectionData.label}
           </Text>
-          <Text size="regular" color="#546A83">
+          <Text specificSize={14} color="#546A83">
             {sectionData.description}
           </Text>
           {sectionData.questions.map((question) => {
             switch (question.type) {
               case 'text':
                 return (
-                  <Padding size={0} top={20} left={0}>
+                  <Padding key={question.id} size={0} top={20} left={0}>
                     <Text size="regular" color="#000000" marginBottom={12}>
                       <strong>{question.label}</strong>
                     </Text>
@@ -108,19 +108,19 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
                       placeholder={question.placeholder}
                       type="text"
                       value={formik.values[question.id]}
-                      key={question.id}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.errors[question.apiName] && formik.touched[question.apiName] && (
+                    {(formik.errors[question.apiName] && formik.touched[question.apiName]) ||
+                    (!formik.isValid && formik.errors[question.apiName]) ? (
                       <div className="error">{formik.errors[question.apiName]}</div>
-                    )}
+                    ) : null}
                   </Padding>
                 );
               case 'phoneNumber':
               case 'number':
                 return (
-                  <Padding size={0} top={20} left={0}>
+                  <Padding key={question.id} size={0} top={20} left={0}>
                     <Text size="regular" color="#000000" marginBottom={12}>
                       <strong>{question.label}</strong>
                     </Text>
@@ -135,9 +135,10 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.errors[question.apiName] && formik.touched[question.apiName] && (
+                    {(formik.errors[question.apiName] && formik.touched[question.apiName]) ||
+                    (!formik.isValid && formik.errors[question.apiName]) ? (
                       <div className="error">{formik.errors[question.apiName]}</div>
-                    )}
+                    ) : null}
                   </Padding>
                 );
               default:
