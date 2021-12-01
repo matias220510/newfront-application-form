@@ -48,6 +48,7 @@ interface TextProps {
   prewrap?: boolean;
   pre?: boolean;
   size?: TextSizes;
+  specificSize?: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   style?: any;
   tabIndex?: number;
@@ -71,6 +72,7 @@ export function Text(props: TextProps): JSX.Element {
     prewrap = false,
     pre = false,
     size = 'regular',
+    specificSize = 0,
     style = {},
     tabIndex,
     textAlign = 'left',
@@ -108,6 +110,7 @@ export function Text(props: TextProps): JSX.Element {
         ...style,
         fontWeight: weight,
         color: textColor,
+        ...(specificSize && { fontSize: `${specificSize}px` }),
         marginBottom,
         marginTop,
         display,
