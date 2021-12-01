@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
 import { Box, Button, Divider, Flexbox, FlexCell, Padding, Text } from '@/ui';
@@ -53,6 +54,7 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
   const [shouldSubmitForm, setShouldSubmitForm] = useState(false);
   const [showBackButton, setShowBackButton] = useState(false);
   const [isFormValid, setIsFormValid] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     setShouldSubmitForm(sectionData.currentSection === totalSections);
@@ -78,8 +80,13 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
     },
     onSubmit: (values) => {
       addFormData(values);
-      // eslint-disable-next-line no-console
-      console.log('FORM VALUES:', values);
+      if (shouldSubmitForm) {
+        // eslint-disable-next-line no-console
+        console.log('FORM VALUES:', values);
+        return;
+      }
+
+      router.push(`/form/${sectionData.currentSection + 1}`);
     },
   });
 
@@ -161,19 +168,9 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
               )}
             </FlexCell>
             <FlexCell>
-              {shouldSubmitForm ? (
-                <Button size="primary" type="submit">
-                  Submit
-                </Button>
-              ) : (
-                <Link href={`/form/${sectionData.currentSection + 1}`}>
-                  <NextButton isFormValid={isFormValid} className={`${!formik.isValid ? 'disabled' : ''}`}>
-                    <Text size="regular" color="#ffffff" textAlign="center" weight={600}>
-                      Next
-                    </Text>
-                  </NextButton>
-                </Link>
-              )}
+              <Button size="primary" type="submit">
+                {shouldSubmitForm ? 'Submit' : 'Next'}
+              </Button>
             </FlexCell>
           </Flexbox>
         </Padding>
