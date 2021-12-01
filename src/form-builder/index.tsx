@@ -87,7 +87,7 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
     <form onSubmit={formik.handleSubmit}>
       <Box width={640} border={1} borderRadius={10}>
         <Padding size={24}>
-          <Text size="large" weight={400} color="#000000">
+          <Text specificSize={20} weight={400} color="#000000">
             {sectionData.label}
           </Text>
           <Text size="regular" color="#546A83">
@@ -145,7 +145,7 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
             }
           })}
         </Padding>
-        <Padding y={24}>
+        <Padding y={5}>
           <Divider />
           <Flexbox alignItems="center" justifyContent="space-between" padding={24}>
             <FlexCell>
@@ -174,12 +174,6 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
                 </Link>
               )}
             </FlexCell>
-          </Flexbox>
-        </Padding>
-        <Padding y={24}>
-          <Divider />
-          <Flexbox alignItems="center" justifyContent="center" padding={24}>
-            <FlexCell>{sectionData.currentSection === totalSections && <div>INFO:</div>}</FlexCell>
           </Flexbox>
         </Padding>
       </Box>
