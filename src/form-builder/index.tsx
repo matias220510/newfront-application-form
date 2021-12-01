@@ -36,10 +36,10 @@ const BackButton = styled.a`
 
 export function FormBuilder({ sectionData, totalSections }: Form): JSX.Element {
   const router = useRouter();
-  const [formData, addFormData] = useContext(FormContext); // Not using formData for the moment
+  const [, addFormData] = useContext(FormContext); // Not using formData for the moment
   const [shouldSubmitForm, setShouldSubmitForm] = useState<boolean>(false);
   const [showBackButton, setShowBackButton] = useState<boolean>(false);
-  const [isFormValid, setIsFormValid] = useState<boolean>(true); // Not using isFormValid for the moment
+  const [, setIsFormValid] = useState<boolean>(true); // Not using isFormValid for the moment
 
   useEffect(() => {
     setShouldSubmitForm(sectionData.currentSection === totalSections);
@@ -143,7 +143,7 @@ export function FormBuilder({ sectionData, totalSections }: Form): JSX.Element {
             }
           })}
         </Padding>
-        <Padding y={5}>
+        <Padding y={4}>
           <Divider />
           <Flexbox alignItems="center" justifyContent="space-between" padding={24}>
             <FlexCell>

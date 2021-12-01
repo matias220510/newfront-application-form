@@ -2,7 +2,7 @@ import React from 'react';
 import { FlowBody, FlowWrapper } from '@/ui';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { FormBuilder } from '@/form-builder';
-import formData from '@/pages/form/data';
+import formData from '@/data/data';
 
 export default function Form({ sectionData, totalSections }): JSX.Element {
   return (
