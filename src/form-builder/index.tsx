@@ -110,7 +110,9 @@ export function FormBuilder({ sectionData, totalSections }: Form): JSX.Element {
                     />
                     {(formik.errors[question.apiName] && formik.touched[question.apiName]) ||
                     (!formik.isValid && formik.errors[question.apiName]) ? (
-                      <div className="error">{formik.errors[question.apiName]}</div>
+                      <Text marginTop={5} color="error">
+                        {formik.errors[question.apiName]}
+                      </Text>
                     ) : null}
                   </Padding>
                 );
@@ -134,7 +136,9 @@ export function FormBuilder({ sectionData, totalSections }: Form): JSX.Element {
                     />
                     {(formik.errors[question.apiName] && formik.touched[question.apiName]) ||
                     (!formik.isValid && formik.errors[question.apiName]) ? (
-                      <div className="error">{formik.errors[question.apiName]}</div>
+                      <Text marginTop={5} color="error">
+                        {formik.errors[question.apiName]}
+                      </Text>
                     ) : null}
                   </Padding>
                 );
