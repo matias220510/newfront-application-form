@@ -78,7 +78,7 @@ const formData = {
           ordering: '0117800001',
           placeholder: '',
           isRequired: false,
-          type: 'number',
+          type: 'text',
           createdAt: '2019-06-12T18:48:58.011Z',
           updatedAt: '2019-06-12T18:48:58.011Z',
           dependsOnIdQuestion: 40580,

@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, ContextType, Context } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
 import { Box, Button, Divider, Flexbox, FlexCell, Padding, Text } from '@/ui';
-import { useContext } from 'react';
 import FormContext from '@/contexts/form';
 
-interface Props {
+interface Form {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sectionData: any;
-  title: string;
   totalSections: number;
 }
 
@@ -36,32 +34,24 @@ const BackButton = styled.a`
   padding-top: 8px;
 `;
 
-const NextButton = styled.a`
-  background: #0957c3;
-  display: inline-block;
-  border-radius: 3px;
-  height: 32px;
-  width: 91px;
-  border-radius: 3px;
-  color: #ffffff;
-  cursor: pointer;
-  padding-top: 8px;
-  pointer-events: ${(props) => (props.isFormValid ? '' : 'none')};
-`;
-
-export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.Element {
-  const [formData, addFormData] = useContext(FormContext);
-  const [shouldSubmitForm, setShouldSubmitForm] = useState(false);
-  const [showBackButton, setShowBackButton] = useState(false);
-  const [isFormValid, setIsFormValid] = useState(true);
+export function FormBuilder({ sectionData, totalSections }: Form): JSX.Element {
   const router = useRouter();
+  const [formData, addFormData] = useContext(FormContext); // Not using formData for the moment
+  const [shouldSubmitForm, setShouldSubmitForm] = useState<boolean>(false);
+  const [showBackButton, setShowBackButton] = useState<boolean>(false);
+  const [isFormValid, setIsFormValid] = useState<boolean>(true); // Not using isFormValid for the moment
 
   useEffect(() => {
     setShouldSubmitForm(sectionData.currentSection === totalSections);
     setShowBackButton(sectionData.currentSection <= totalSections && sectionData.currentSection > 1);
   }, [sectionData.currentSection]);
 
+  const goToNextRoute = () => {
+    router.push(`/form/${sectionData.currentSection + 1}`);
+  };
+
   const formik = useFormik({
+    // TODO: Create dynamic initial values
     initialValues: {
       fullName: '',
       role: '',
@@ -86,7 +76,7 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
         return;
       }
 
-      router.push(`/form/${sectionData.currentSection + 1}`);
+      goToNextRoute();
     },
   });
 
