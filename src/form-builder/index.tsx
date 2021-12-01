@@ -23,12 +23,16 @@ const Input = styled.input`
 `;
 
 const BackButton = styled.a`
-  border: 1px solid #dbdbdb;
-  box-sizing: border-box;
+  background: #ffffff;
+  display: inline-block;
+  border: 1px solid #e6e6e6;
   border-radius: 3px;
-  height: 40px;
-  width: 542px;
+  height: 32px;
+  width: 91px;
   border-radius: 3px;
+  color: #000000;
+  cursor: pointer;
+  padding-top: 8px;
 `;
 
 const NextButton = styled.a`
@@ -137,7 +141,7 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
                   </Padding>
                 );
               default:
-                return 'IS ANOTHER ONE!';
+                return 'NO FIELD DETECTED';
             }
           })}
         </Padding>
@@ -147,7 +151,11 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
             <FlexCell>
               {showBackButton && (
                 <Link href={`/form/${sectionData.currentSection - 1}`}>
-                  <a className={`${!formik.isValid ? 'disabled' : ''}`}>Back</a>
+                  <BackButton>
+                    <Text size="regular" color="#000000" textAlign="center" weight={600}>
+                      Back
+                    </Text>
+                  </BackButton>
                 </Link>
               )}
             </FlexCell>
@@ -159,7 +167,7 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
               ) : (
                 <Link href={`/form/${sectionData.currentSection + 1}`}>
                   <NextButton isFormValid={isFormValid} className={`${!formik.isValid ? 'disabled' : ''}`}>
-                    <Text size="regular" color="#ffffff" textAlign="center">
+                    <Text size="regular" color="#ffffff" textAlign="center" weight={600}>
                       Next
                     </Text>
                   </NextButton>
