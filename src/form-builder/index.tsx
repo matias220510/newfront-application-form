@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useFormik } from 'formik';
+import styled from 'styled-components';
 import { Box, Button, Divider, Flexbox, FlexCell, Padding, Text } from '@/ui';
 import { useContext } from 'react';
 import FormContext from '@/contexts/form';
@@ -12,14 +13,42 @@ interface Props {
   totalSections: number;
 }
 
-const handleSubmitForm = () => {
-  console.log('Submit!');
-};
+const Input = styled.input`
+  border: 1px solid #dbdbdb;
+  box-sizing: border-box;
+  border-radius: 3px;
+  height: 40px;
+  width: 542px;
+  border-radius: 3px;
+`;
+
+const BackButton = styled.a`
+  border: 1px solid #dbdbdb;
+  box-sizing: border-box;
+  border-radius: 3px;
+  height: 40px;
+  width: 542px;
+  border-radius: 3px;
+`;
+
+const NextButton = styled.a`
+  background: #0957c3;
+  display: inline-block;
+  border-radius: 3px;
+  height: 32px;
+  width: 91px;
+  border-radius: 3px;
+  color: #ffffff;
+  cursor: pointer;
+  padding-top: 8px;
+  pointer-events: ${(props) => (props.isFormValid ? '' : 'none')};
+`;
 
 export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.Element {
   const [formData, addFormData] = useContext(FormContext);
   const [shouldSubmitForm, setShouldSubmitForm] = useState(false);
   const [showBackButton, setShowBackButton] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(true);
 
   useEffect(() => {
     setShouldSubmitForm(sectionData.currentSection === totalSections);
@@ -40,11 +69,13 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
         }
       });
 
+      setIsFormValid(!Object.keys(errors).length);
+
       return errors;
     },
     onSubmit: (values) => {
       addFormData(values);
-      console.log('FORM VALUES:', values);
+      console.log('ON SUBMIT. FORM VALUES:', values);
     },
   });
 
@@ -52,16 +83,21 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
     <form onSubmit={formik.handleSubmit}>
       <Box width={640} border={1} borderRadius={10}>
         <Padding size={24}>
-          <Text size="large">{sectionData.label}</Text>
-          <Text size="regular">{sectionData.description}</Text>
-
+          <Text size="large" weight={400} color="#000000">
+            {sectionData.label}
+          </Text>
+          <Text size="regular" color="#546A83">
+            {sectionData.description}
+          </Text>
           {sectionData.questions.map((question) => {
             switch (question.type) {
               case 'text':
                 return (
                   <Padding size={0} top={20} left={0}>
-                    <Text size="large">{question.label}</Text>
-                    <input
+                    <Text size="regular" color="#000000" marginBottom={12}>
+                      <strong>{question.label}</strong>
+                    </Text>
+                    <Input
                       id={question.id}
                       name={question.apiName}
                       width="542px"
@@ -81,8 +117,10 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
               case 'number':
                 return (
                   <Padding size={0} top={20} left={0}>
-                    <Text size="large">{question.label}</Text>
-                    <input
+                    <Text size="regular" color="#000000" marginBottom={12}>
+                      <strong>{question.label}</strong>
+                    </Text>
+                    <Input
                       id={question.id}
                       name={question.apiName}
                       width="542px"
@@ -120,7 +158,11 @@ export function FormBuilder({ sectionData, title, totalSections }: Props): JSX.E
                 </Button>
               ) : (
                 <Link href={`/form/${sectionData.currentSection + 1}`}>
-                  <a className={`${!formik.isValid ? 'disabled' : ''}`}>Next</a>
+                  <NextButton isFormValid={isFormValid} className={`${!formik.isValid ? 'disabled' : ''}`}>
+                    <Text size="regular" color="#ffffff" textAlign="center">
+                      Next
+                    </Text>
+                  </NextButton>
                 </Link>
               )}
             </FlexCell>
